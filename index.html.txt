@@ -1,0 +1,1036 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>For Tiger 🐅 — A Little Birthday Surprise</title>
+  
+  <!-- Luxury Serif & Clean Editorial Sans Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ivory: #FAF6EF;
+      --ivory-dark: #F2EBE0;
+      --gold: #D6B982;
+      --gold-dark: #BFA065;
+      --rose: #D8A6A1;
+      --rose-light: #EBD2CF;
+      --mocha: #8C7468;
+      --mocha-deep: #5C4A41;
+      --white: #FFFFFF;
+      --shadow-soft: 0 20px 50px rgba(140, 116, 104, 0.12);
+      --shadow-card: 0 12px 35px rgba(140, 116, 104, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100dvh;
+      background-color: var(--ivory);
+      color: var(--mocha-deep);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(216, 166, 161, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(214, 185, 130, 0.18) 0%, transparent 45%);
+    }
+
+    /* Subtle Paper Grain Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    }
+
+    /* Ambient Canvas for Petals & Sparkles */
+    #ambient-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Audio Control Pill */
+    .audio-control {
+      position: fixed;
+      top: max(18px, env(safe-area-inset-top));
+      right: 18px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(214, 185, 130, 0.45);
+      color: var(--mocha-deep);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(140, 116, 104, 0.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+    }
+
+    .audio-control.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .audio-control:hover {
+      background: var(--white);
+      border-color: var(--gold);
+    }
+
+    .sound-bars {
+      display: flex;
+      align-items: flex-end;
+      height: 12px;
+      gap: 2px;
+    }
+
+    .sound-bars span {
+      display: block;
+      width: 2px;
+      background-color: var(--gold-dark);
+      border-radius: 2px;
+      transition: height 0.2s ease;
+    }
+
+    .audio-control.playing .sound-bars span:nth-child(1) { animation: soundWave 0.9s infinite ease-in-out; }
+    .audio-control.playing .sound-bars span:nth-child(2) { animation: soundWave 0.6s infinite ease-in-out 0.2s; }
+    .audio-control.playing .sound-bars span:nth-child(3) { animation: soundWave 0.8s infinite ease-in-out 0.4s; }
+    .audio-control:not(.playing) .sound-bars span { height: 3px !important; }
+
+    @keyframes soundWave {
+      0%, 100% { height: 3px; }
+      50% { height: 12px; }
+    }
+
+    /* Main Screen Container */
+    main {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 18px;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 580px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .screen.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Typography Helpers */
+    .serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    .eyebrow {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--mocha);
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+
+    /* =========================================
+       SCREEN 1: OPENING ENVELOPE
+       ========================================= */
+    .envelope-stage {
+      perspective: 1200px;
+      margin: 10px 0 34px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .envelope-wrapper {
+      width: 290px;
+      height: 195px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: gentleFloat 4.2s ease-in-out infinite;
+      transition: transform 0.5s ease;
+    }
+
+    .envelope-stage:hover .envelope-wrapper {
+      transform: translateY(-4px) scale(1.015);
+    }
+
+    .envelope-wrapper.opening {
+      animation: none;
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Envelope Back */
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, #F5EDE0, #EAE0D0);
+      border-radius: 8px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(214, 185, 130, 0.5);
+    }
+
+    /* Letter Card Peeking Inside */
+    .envelope-letter-preview {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 10px;
+      height: 165px;
+      background: var(--white);
+      border-radius: 6px;
+      border: 1px solid rgba(214, 185, 130, 0.4);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      transition: transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s;
+      z-index: 2;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .envelope-letter-preview::after {
+      content: "";
+      width: 60%;
+      height: 1px;
+      background: var(--gold);
+      margin-top: 12px;
+      opacity: 0.6;
+    }
+
+    .preview-monogram {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--mocha);
+      font-size: 1.15rem;
+    }
+
+    .envelope-wrapper.opening .envelope-letter-preview {
+      transform: translateY(-85px);
+    }
+
+    /* Envelope Pocket (Front Flaps) */
+    .envelope-pocket {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .envelope-pocket::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #FCF9F4 0%, #F3EAD9 100%);
+      clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+      border-bottom: 1px solid rgba(214, 185, 130, 0.5);
+    }
+
+    .envelope-pocket::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(214, 185, 130, 0.16), transparent 60%);
+      clip-path: polygon(0 100%, 50% 50%, 100% 100%);
+    }
+
+    /* Envelope Top Flap */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 112px;
+      background: linear-gradient(180deg, #F8F2E7 0%, #EDE2CE 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s linear 0.3s;
+      z-index: 4;
+      border-top: 1px solid rgba(214, 185, 130, 0.6);
+      filter: drop-shadow(0 4px 6px rgba(140, 116, 104, 0.12));
+    }
+
+    .envelope-wrapper.opening .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    /* Wax Seal */
+    .wax-seal {
+      position: absolute;
+      top: 86px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #E3B6B1, var(--rose) 65%, #BE8984 100%);
+      box-shadow: 0 4px 12px rgba(140, 116, 104, 0.28), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .wax-seal span {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--white);
+      font-size: 1.25rem;
+      text-shadow: 0 1px 2px rgba(92, 74, 65, 0.25);
+    }
+
+    .envelope-wrapper.opening .wax-seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.75);
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 6vw, 2.75rem);
+      font-weight: 500;
+      color: var(--mocha-deep);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      color: var(--mocha);
+      font-weight: 300;
+      margin-bottom: 30px;
+      letter-spacing: 0.01em;
+    }
+
+    /* Luxury Primary Button */
+    .btn-luxury {
+      background: var(--white);
+      color: var(--mocha-deep);
+      border: 1px solid var(--gold);
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(214, 185, 130, 0.22);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-luxury:hover {
+      background: linear-gradient(135deg, #FFFDF9, #F9F2E6);
+      border-color: var(--gold-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(214, 185, 130, 0.32);
+    }
+
+    .btn-luxury:active {
+      transform: translateY(0);
+    }
+
+    /* =========================================
+       SCREEN 2: BIRTHDAY LETTER
+       ========================================= */
+    .letter-card {
+      background: var(--white);
+      width: 100%;
+      border-radius: 16px;
+      padding: clamp(28px, 6vw, 52px) clamp(22px, 5.5vw, 48px);
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(214, 185, 130, 0.38);
+      position: relative;
+      text-align: left;
+      margin: 12px 0 24px;
+    }
+
+    /* Delicate Inner Stationery Frame */
+    .letter-card::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(214, 185, 130, 0.24);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .floral-corner {
+      width: 54px;
+      height: 54px;
+      position: absolute;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .floral-top-right {
+      top: 16px;
+      right: 16px;
+    }
+
+    .floral-bottom-left {
+      bottom: 16px;
+      left: 16px;
+      transform: rotate(180deg);
+    }
+
+    .letter-date-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--mocha);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .letter-date-mark::after {
+      content: "";
+      height: 1px;
+      width: 36px;
+      background: var(--gold);
+      opacity: 0.7;
+    }
+
+    .letter-body {
+      font-size: clamp(0.95rem, 2.6vw, 1.02rem);
+      line-height: 1.75;
+      color: var(--mocha-deep);
+      font-weight: 400;
+    }
+
+    .letter-paragraph {
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .letter-paragraph.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-greeting {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.38rem, 4vw, 1.65rem);
+      font-weight: 600;
+      color: var(--mocha-deep);
+      margin-bottom: 16px;
+    }
+
+    .letter-signoff {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(214, 185, 130, 0.25);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--mocha-deep);
+      line-height: 1.45;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .letter-signoff.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-actions {
+      margin-top: 8px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .letter-actions.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================
+       SCREEN 3: CLOSING SCREEN
+       ========================================= */
+    .closing-card {
+      padding: 44px 28px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+    }
+
+    .bloom-emblem {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 26px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bloom-emblem svg {
+      width: 100%;
+      height: 100%;
+      animation: slowSpin 24s linear infinite;
+    }
+
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .closing-headline {
+      font-size: clamp(1.95rem, 5.8vw, 2.6rem);
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--mocha-deep);
+      margin-bottom: 16px;
+    }
+
+    .closing-sub {
+      font-size: 1rem;
+      color: var(--mocha);
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      font-weight: 400;
+    }
+
+    .gold-divider {
+      width: 64px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 28px;
+    }
+
+    .closing-final {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-style: italic;
+      color: var(--mocha-deep);
+      margin-bottom: 34px;
+    }
+
+    .replay-link {
+      background: none;
+      border: none;
+      color: var(--mocha);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .replay-link:hover {
+      color: var(--mocha-deep);
+      border-bottom-color: var(--gold);
+    }
+
+    /* Mobile Optimization (iPhone viewport ergonomics) */
+    @media (max-width: 480px) {
+      main {
+        padding: 18px 14px;
+      }
+      .envelope-wrapper {
+        width: 265px;
+        height: 178px;
+      }
+      .wax-seal {
+        top: 76px;
+        width: 44px;
+        height: 44px;
+      }
+      .letter-card {
+        padding: 26px 20px;
+      }
+      .letter-body {
+        line-height: 1.68;
+      }
+      .letter-paragraph {
+        margin-bottom: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Rose Petals & Champagne Sparkles -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- Subtle Music Toggle (appears after user interaction) -->
+  <button id="audioToggle" class="audio-control" aria-label="Toggle background music">
+    <div class="sound-bars">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <span id="audioLabel">Music On</span>
+  </button>
+
+  <main>
+    <!-- =====================================
+         SCREEN 1: OPENING ENVELOPE
+         ===================================== -->
+    <section id="screen-opening" class="screen active visible">
+      <p class="eyebrow">A little birthday surprise</p>
+
+      <div class="envelope-stage" id="envelopeTrigger" role="button" tabindex="0" aria-label="Open birthday envelope">
+        <div class="envelope-wrapper" id="envelopeWrapper">
+          <div class="envelope-back"></div>
+          <div class="envelope-letter-preview">
+            <span class="preview-monogram">For Tiger</span>
+          </div>
+          <div class="envelope-pocket"></div>
+          <div class="envelope-flap"></div>
+          <div class="wax-seal">
+            <span>T</span>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="hero-title serif">For Tiger 🐅</h1>
+      <p class="hero-subtitle">Someone has something to tell you…</p>
+
+      <button id="openBtn" class="btn-luxury">Open your surprise 🤍</button>
+    </section>
+
+    <!-- =====================================
+         SCREEN 2: THE BIRTHDAY LETTER
+         ===================================== -->
+    <section id="screen-letter" class="screen">
+      <article class="letter-card">
+        <!-- Delicate Botanical Line Art Corners -->
+        <svg class="floral-corner floral-top-right" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M88 12C68 16 48 32 38 56M88 12C82 32 66 52 42 62M88 12C72 24 58 38 48 52" stroke="#D6B982" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M62 24C56 16 46 16 42 22C48 26 56 26 62 24Z" stroke="#D8A6A1" stroke-width="1.1"/>
+          <path d="M74 36C82 42 82 52 76 56C72 50 72 42 74 36Z" stroke="#D8A6A1" stroke-width="1.1"/>
+          <circle cx="34" cy="62" r="2" fill="#D6B982"/>
+        </svg>
+
+        <svg class="floral-corner floral-bottom-left" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M88 12C68 16 48 32 38 56M88 12C82 32 66 52 42 62M88 12C72 24 58 38 48 52" stroke="#D6B982" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M62 24C56 16 46 16 42 22C48 26 56 26 62 24Z" stroke="#D8A6A1" stroke-width="1.1"/>
+          <path d="M74 36C82 42 82 52 76 56C72 50 72 42 74 36Z" stroke="#D8A6A1" stroke-width="1.1"/>
+          <circle cx="34" cy="62" r="2" fill="#D6B982"/>
+        </svg>
+
+        <div class="letter-date-mark">A note for you</div>
+
+        <div class="letter-body" id="letterContent">
+          <p class="letter-paragraph letter-greeting">Happy birthday, Tiger! 🐅❤️</p>
+
+          <p class="letter-paragraph">Finally, a young lady! 😂 Welcome to a new chapter of life. I genuinely wish you nothing but beautiful things ahead.</p>
+
+          <p class="letter-paragraph">One thing I hope you never do is lose the beautiful parts of yourself. Your happiness, your playful nature, your endless yapping 😂, your soft heart and that ambitious spirit that wants to become something remarkable. Never feel pressured to become someone else just to be accepted. Keep growing, keep exploring, chase those big dreams, make beautiful memories, but never lose yourself or compromise the values that make you who you are.</p>
+
+          <p class="letter-paragraph">I pray Allah blesses this new chapter with barakah, genuine happiness, good health, beautiful opportunities and success beyond what you imagine. May He protect your heart and surround you with people who genuinely understand and appreciate you.</p>
+
+          <p class="letter-paragraph">Most importantly, may the woman you’re becoming make the little girl you once were proud.</p>
+
+          <p class="letter-paragraph">Enjoy your day, Tiger. And please, never run out of things to yap about. 😂❤️</p>
+        </div>
+
+        <div class="letter-signoff" id="letterSignoff">
+          With love,<br>
+          Mubzeey.
+        </div>
+      </article>
+
+      <div class="letter-actions" id="letterActions">
+        <button id="toClosingBtn" class="btn-luxury">One more thing… ✨</button>
+      </div>
+    </section>
+
+    <!-- =====================================
+         SCREEN 3: CLOSING SCREEN
+         ===================================== -->
+    <section id="screen-closing" class="screen">
+      <div class="closing-card">
+        <!-- Animated Botanical / Sparkle Crest -->
+        <div class="bloom-emblem">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="44" stroke="#D6B982" stroke-width="0.8" stroke-dasharray="3 4"/>
+            <path d="M50 14C53 32 68 47 86 50C68 53 53 68 50 86C47 68 32 53 14 50C32 47 47 32 50 14Z" stroke="#D8A6A1" stroke-width="1.2" fill="rgba(216, 166, 161, 0.1)"/>
+            <path d="M50 24C52 38 62 48 76 50C62 52 52 62 50 76C48 62 38 52 24 50C38 48 48 38 50 24Z" stroke="#D6B982" stroke-width="1"/>
+            <circle cx="50" cy="50" r="3.5" fill="#D6B982"/>
+          </svg>
+        </div>
+
+        <h2 class="closing-headline serif">Here’s to the woman you’re becoming.</h2>
+        <p class="closing-sub">Keep growing. Keep glowing. Keep being YOU.</p>
+
+        <div class="gold-divider"></div>
+
+        <p class="closing-final">Happy birthday, Tiger. 🤍</p>
+
+        <button id="replayBtn" class="replay-link">Read letter again</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ==========================================================================
+       1. GENTLE AMBIENT MUSIC BOX SYNTHESIZER (Zero external MP3 dependencies)
+       ========================================================================== */
+    class AmbientMusicBox {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.isMuted = false;
+        this.intervalId = null;
+        this.step = 0;
+        // Soft, warm Fmaj9 / Cmaj7 music-box arpeggio frequencies (Hz)
+        this.notes = [
+          349.23, // F4
+          440.00, // A4
+          523.25, // C5
+          659.25, // E5
+          587.33, // D5
+          523.25, // C5
+          440.00, // A4
+          392.00, // G4
+          329.63, // E4
+          392.00, // G4
+          493.88, // B4
+          587.33, // D5
+          523.25, // C5
+          440.00, // A4
+          392.00, // G4
+          440.00  // A4
+        ];
+      }
+
+      start() {
+        if (this.isPlaying) return;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+
+        if (!this.ctx) {
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        this.isPlaying = true;
+        this.isMuted = false;
+        this.playNote();
+        this.intervalId = setInterval(() => this.playNote(), 1150);
+      }
+
+      playNote() {
+        if (!this.ctx || this.isMuted) return;
+
+        const now = this.ctx.currentTime;
+        const freq = this.notes[this.step % this.notes.length];
+        this.step++;
+
+        // Primary soft bell tone
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        // Subtle warm harmonic overtone
+        const overtone = this.ctx.createOscillator();
+        const overtoneGain = this.ctx.createGain();
+        overtone.type = 'triangle';
+        overtone.frequency.setValueAtTime(freq * 2, now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.045, now + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.6);
+
+        overtoneGain.gain.setValueAtTime(0.0001, now);
+        overtoneGain.gain.exponentialRampToValueAtTime(0.008, now + 0.06);
+        overtoneGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        overtone.connect(overtoneGain);
+        overtoneGain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 2.7);
+        overtone.start(now);
+        overtone.stop(now + 1.5);
+      }
+
+      toggleMute() {
+        if (!this.isPlaying) {
+          this.start();
+          return false;
+        }
+        this.isMuted = !this.isMuted;
+        if (!this.isMuted && this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+        return this.isMuted;
+      }
+    }
+
+    const musicBox = new AmbientMusicBox();
+
+    /* ==========================================================================
+       2. FLOATING PETALS & CHAMPAGNE SPARKLES CANVAS
+       ========================================================================== */
+    const canvas = document.getElementById('ambient-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset(true);
+      }
+
+      reset(initial = false) {
+        this.x = Math.random() * width;
+        this.y = initial ? Math.random() * height : -20;
+        this.type = Math.random() > 0.42 ? 'sparkle' : 'petal';
+        this.size = this.type === 'sparkle' ? Math.random() * 2.2 + 1 : Math.random() * 5 + 3.5;
+        this.speedY = Math.random() * 0.45 + 0.18;
+        this.speedX = (Math.random() - 0.5) * 0.35;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = (Math.random() - 0.5) * 0.015;
+        this.opacity = Math.random() * 0.45 + 0.2;
+        this.twinkleSpeed = Math.random() * 0.03 + 0.01;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX + Math.sin(this.angle) * 0.22;
+        this.angle += this.spin;
+
+        if (this.type === 'sparkle') {
+          this.opacity += Math.sin(Date.now() * this.twinkleSpeed) * 0.008;
+        }
+
+        if (this.y > height + 20 || this.x < -20 || this.x > width + 20) {
+          this.reset(false);
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.globalAlpha = Math.max(0.08, Math.min(0.65, this.opacity));
+
+        if (this.type === 'sparkle') {
+          ctx.fillStyle = '#D6B982';
+          ctx.beginPath();
+          // Four-point soft star sparkle
+          const s = this.size;
+          ctx.moveTo(0, -s * 1.6);
+          ctx.quadraticCurveTo(0, 0, s * 1.6, 0);
+          ctx.quadraticCurveTo(0, 0, 0, s * 1.6);
+          ctx.quadraticCurveTo(0, 0, -s * 1.6, 0);
+          ctx.quadraticCurveTo(0, 0, 0, -s * 1.6);
+          ctx.fill();
+        } else {
+          // Delicate dusty-rose petal
+          ctx.fillStyle = '#D8A6A1';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, this.size, this.size * 0.58, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    const particleCount = Math.min(34, Math.floor(window.innerWidth / 14));
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ==========================================================================
+       3. INTERACTIVE SCREEN FLOW & ENVELOPE ANIMATION
+       ========================================================================== */
+    const screenOpening = document.getElementById('screen-opening');
+    const screenLetter = document.getElementById('screen-letter');
+    const screenClosing = document.getElementById('screen-closing');
+
+    const envelopeTrigger = document.getElementById('envelopeTrigger');
+    const envelopeWrapper = document.getElementById('envelopeWrapper');
+    const openBtn = document.getElementById('openBtn');
+    const toClosingBtn = document.getElementById('toClosingBtn');
+    const replayBtn = document.getElementById('replayBtn');
+
+    const audioToggle = document.getElementById('audioToggle');
+    const audioLabel = document.getElementById('audioLabel');
+
+    let isTransitioning = false;
+
+    function switchScreen(fromScreen, toScreen, callback) {
+      fromScreen.classList.remove('visible');
+      setTimeout(() => {
+        fromScreen.classList.remove('active');
+        toScreen.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            toScreen.classList.add('visible');
+            if (callback) callback();
+          });
+        });
+      }, 650);
+    }
+
+    function revealLetterUnfolding() {
+      const paragraphs = document.querySelectorAll('.letter-paragraph');
+      const signoff = document.getElementById('letterSignoff');
+      const actions = document.getElementById('letterActions');
+
+      // Reset states in case of replay
+      paragraphs.forEach(p => p.classList.remove('reveal'));
+      signoff.classList.remove('reveal');
+      actions.classList.remove('reveal');
+
+      paragraphs.forEach((p, index) => {
+        setTimeout(() => {
+          p.classList.add('reveal');
+        }, 250 + index * 420);
+      });
+
+      const totalDelay = 250 + paragraphs.length * 420;
+      setTimeout(() => {
+        signoff.classList.add('reveal');
+      }, totalDelay + 200);
+
+      setTimeout(() => {
+        actions.classList.add('reveal');
+      }, totalDelay + 650);
+    }
+
+    function handleOpenSurprise() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+
+      // Start gentle background music on first interaction
+      musicBox.start();
+      audioToggle.classList.add('visible', 'playing');
+      audioLabel.textContent = 'Music On';
+
+      // Trigger envelope flap & letter peek animation
+      envelopeWrapper.classList.add('opening');
+
+      setTimeout(() => {
+        switchScreen(screenOpening, screenLetter, () => {
+          revealLetterUnfolding();
+          isTransitioning = false;
+        });
+      }, 1150);
+    }
+
+    openBtn.addEventListener('click', handleOpenSurprise);
+    envelopeTrigger.addEventListener('click', handleOpenSurprise);
+    envelopeTrigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleOpenSurprise();
+      }
+    });
+
+    toClosingBtn.addEventListener('click', () => {
+      switchScreen(screenLetter, screenClosing);
+    });
+
+    replayBtn.addEventListener('click', () => {
+      envelopeWrapper.classList.remove('opening');
+      switchScreen(screenClosing, screenOpening);
+    });
+
+    audioToggle.addEventListener('click', () => {
+      const muted = musicBox.toggleMute();
+      if (muted) {
+        audioToggle.classList.remove('playing');
+        audioLabel.textContent = 'Muted';
+      } else {
+        audioToggle.classList.add('playing');
+        audioLabel.textContent = 'Music On';
+      }
+    });
+  </script>
+</body>
+</html>
+
